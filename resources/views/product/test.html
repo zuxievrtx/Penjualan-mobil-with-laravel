@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Produk CRUD</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f0f4f8;
+                color: #333;
+                line-height: 1.6;
+                padding: 20px;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                text-align: center;
+                color: #2c3e50;
+                margin-bottom: 30px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            th,
+            td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            th {
+                background-color: #3498db;
+                color: #ffffff;
+                font-weight: 600;
+            }
+            tr:hover {
+                background-color: #f5f5f5;
+                transition: background-color 0.3s ease;
+            }
+            .btn {
+                padding: 8px 12px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                transition: all 0.3s ease;
+            }
+            .btn-edit {
+                background-color: #2ecc71;
+                color: #ffffff;
+                margin-right: 5px;
+            }
+            .btn-delete {
+                background-color: #e74c3c;
+                color: #ffffff;
+            }
+            .btn:hover {
+                opacity: 0.8;
+            }
+            .add-form {
+                margin-top: 30px;
+                display: flex;
+                gap: 10px;
+            }
+            .add-form input {
+                flex: 1;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            .btn-add {
+                background-color: #3498db;
+                color: #ffffff;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Manajemen Produk</h1>
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Produk</th>
+                        <th>Stok</th>
+                        <th>Harga</th>
+                        <th>Barcode</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data produk akan dimasukkan di sini oleh JavaScript -->
+                </tbody>
+            </table>
+            <div class="add-form">
+                <input type="text" id="productName" placeholder="Nama Produk" />
+                <input type="number" id="productStock" placeholder="Stok" />
+                <input
+                    type="number"
+                    id="productPrice"
+                    placeholder="Harga"
+                    step="0.01"
+                />
+                <input type="text" id="productBarcode" placeholder="Barcode" />
+                <button class="btn btn-add" onclick="addProduct()">
+                    Tambah Produk
+                </button>
+            </div>
+        </div>
+
+        <script>
+            let products = [
+                {
+                    id: 1,
+                    name: "test",
+                    stock: 123,
+                    price: 123.0,
+                    barcode: "123a",
+                },
+            ];
+
+            function renderProducts() {
+                const tableBody = document.querySelector("#productTable tbody");
+                tableBody.innerHTML = "";
+                products.forEach((product, index) => {
+                    const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${product.name}</td>
+                        <td>${product.stock}</td>
+                        <td>${product.price.toFixed(2)}</td>
+                        <td>${product.barcode}</td>
+                        <td>
+                            <button class="btn btn-edit" onclick="editProduct(${
+                                product.id
+                            })">Edit</button>
+                            <button class="btn btn-delete" onclick="deleteProduct(${
+                                product.id
+                            })">Hapus</button>
+                        </td>
+                    </tr>
+                `;
+                    tableBody.innerHTML += row;
+                });
+            }
+
+            function addProduct() {
+                const name = document.getElementById("productName").value;
+                const stock = parseInt(
+                    document.getElementById("productStock").value
+                );
+                const price = parseFloat(
+                    document.getElementById("productPrice").value
+                );
+                const barcode = document.getElementById("productBarcode").value;
+
+                if (name && !isNaN(stock) && !isNaN(price) && barcode) {
+                    const newProduct = {
+                        id: products.length + 1,
+                        name,
+                        stock,
+                        price,
+                        barcode,
+                    };
+                    products.push(newProduct);
+                    renderProducts();
+                    clearForm();
+                } else {
+                    alert("Mohon isi semua field dengan benar.");
+                }
+            }
+
+            function editProduct(id) {
+                const product = products.find((p) => p.id === id);
+                if (product) {
+                    document.getElementById("productName").value = product.name;
+                    document.getElementById("productStock").value =
+                        product.stock;
+                    document.getElementById("productPrice").value =
+                        product.price;
+                    document.getElementById("productBarcode").value =
+                        product.barcode;
+                    products = products.filter((p) => p.id !== id);
+                    renderProducts();
+                }
+            }
+
+            function deleteProduct(id) {
+                products = products.filter((p) => p.id !== id);
+                renderProducts();
+            }
+
+            function clearForm() {
+                document.getElementById("productName").value = "";
+                document.getElementById("productStock").value = "";
+                document.getElementById("productPrice").value = "";
+                document.getElementById("productBarcode").value = "";
+            }
+
+            // Inisialisasi tabel
+            renderProducts();
+        </script>
+    </body>
+</html>
