@@ -1,4 +1,4 @@
-Berikut adalah kode migration Laravel berdasarkan ERD yang telah dibuat sebelumnya:
+
 
 ```php
 <?php
@@ -215,29 +215,6 @@ class OrderDetail extends Model
 }
 ```
 
-Beberapa penjelasan penting:
-
-1. Migration:
-- Menggunakan timestamps() untuk created_at dan updated_at
-- Menggunakan foreign key constraints dengan onDelete('cascade')
-- Menggunakan tipe data yang sesuai (decimal untuk harga, text untuk alamat, dll)
-
-2. Model Relations:
-- Product memiliki many OrderDetails
-- Customer memiliki many Orders
-- Order belongs to Customer dan memiliki many OrderDetails
-- Order memiliki many Products melalui OrderDetails (many-to-many)
-- OrderDetail belongs to Order dan Product
-
-3. Fitur tambahan:
-- Protected fillable untuk mass assignment
-- Protected hidden untuk menyembunyikan password
-- Pivot attributes untuk relasi many-to-many
-
-Untuk menjalankan migration:
-```bash
-php artisan migrate
-```
 
 Untuk membuat migration baru:
 ```bash
